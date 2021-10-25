@@ -37,7 +37,11 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Contar los avisamientos en una ciudad")
+    print("3- Contar los avistamientos por duración")
+    print("4- Contar avistamientos por Hora/Minutos del día")
+    print("5- Contar los avistamientos en un rango de fechas")
+    print("6- Contar los avistamientos de una Zona Geográfica")
 
 catalog = None
 

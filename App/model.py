@@ -28,6 +28,7 @@
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
+from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
@@ -38,6 +39,16 @@ los mismos.
 """
 
 # Construccion de modelos
+def newAnalyzer():
+    
+    analyzer = {'crimes': None,
+                'dateIndex': None
+                }
+
+    analyzer['crimes'] = lt.newList('SINGLE_LINKED', '')
+    analyzer['dateIndex'] = om.newMap(omaptype='RBT',
+                                      comparefunction='')
+    return analyzer
 
 # Funciones para agregar informacion al catalogo
 
