@@ -40,15 +40,15 @@ los mismos.
 
 # Construccion de modelos
 def newAnalyzer():
-    
-    analyzer = {'crimes': None,
-                'dateIndex': None
-                }
+    catalog = { 'todos': None,
+                'datetime': None}
+    catalog['todos'] = lt.newList('SINGLE_LINKED')
 
-    analyzer['crimes'] = lt.newList('SINGLE_LINKED', '')
-    analyzer['dateIndex'] = om.newMap(omaptype='RBT',
-                                      comparefunction='')
-    return analyzer
+    catalog['datetime'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compare)
+    
+    return catalog
+
 
 # Funciones para agregar informacion al catalogo
 
@@ -57,5 +57,22 @@ def newAnalyzer():
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
+
+def compareIds(id1, id2):
+    if (id1 == id2):
+        return 0
+    elif (id1 > id2):
+        return 1
+    else:
+        return -1
+
+def compare(eve1, eve2):
+  
+    if (eve1 == eve2):
+        return 0
+    elif (eve1 > eve2):
+        return 1
+    else:
+        return -1
 
 # Funciones de ordenamiento
