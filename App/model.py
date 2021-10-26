@@ -57,21 +57,67 @@ def addEvent(analyzer, event):
     addCity(analyzer['city'], event)
     return analyzer
 
-def addCity(analyzer, evento):
-    entry = om.get(analyzer, evento['city'])
+def addCity(map, evento):
+    city = evento['city']
+    entry = om.get(map, city)
     if entry is None:
         newEntry = newdata()
-        om.put(analyzer, evento['city'], newEntry)
+        om.put(map, city, newEntry)
     else:
         newEntry = me.getValue(entry)
     lt.addLast(newEntry, evento)
-    return analyzer
+    return map
+
+    """
+    occurreddate = crime['OCCURRED_ON_DATE']
+    crimedate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, crimedate.date())
+    if entry is None:
+        datentry = newDataEntry(crime)
+        om.put(map, crimedate.date(), datentry)
+    else:
+        datentry = me.getValue(entry)
+    addDateIndex(datentry, crime)
+    return map
+    """
+
+"""
+def addDateIndex(datentry, crime):
+    lst = datentry['lstcrimes']
+    lt.addLast(lst, crime)
+    offenseIndex = datentry['offenseIndex']
+    offentry = m.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
+    if (offentry is None):
+        entry = newOffenseEntry(crime['OFFENSE_CODE_GROUP'], crime)
+        lt.addLast(entry['lstoffenses'], crime)
+        m.put(offenseIndex, crime['OFFENSE_CODE_GROUP'], entry)
+    else:
+        entry = me.getValue(offentry)
+        lt.addLast(entry['lstoffenses'], crime)
+    return datentry
+"""
 
 # Funciones para creacion de datos
 def newdata():
     entry = lt.newList('SINGLE_LINKED', compare)
     return entry
+
+# ==============================
 # Funciones de consulta
+# ==============================
+
+def Size(analyzer):
+    """
+    Número de crimenes
+    """
+    return lt.size(analyzer['city'])
+
+
+def Height(analyzer):
+    """
+    Altura del arbol
+    """
+    return om.height(analyzer['city'])
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

@@ -35,15 +35,19 @@ operación solicitada
 """
 
 def printMenu():
+    print("\n")
+    print("*******************************************")
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Contar los avisamientos en una ciudad")
-    print("3- Contar los avistamientos por duración")
+    print("3 - Datos caracterìsticos del árbol")
+    #print("3- Contar los avistamientos por duración")
     print("4- Contar avistamientos por Hora/Minutos del día")
     print("5- Contar los avistamientos en un rango de fechas")
-    print("6- Contar los avistamientos de una Zona Geográfica")
+    print("0- Salir")
+    print("*******************************************")
 
-catalog = None
+analyzer = None
 
 """
 Menu principal
@@ -53,11 +57,21 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-        # catalog es el controlador que se usará de acá en adelante
-        catalog = controller.initAnalyzer()
+        analyzer = controller.initAnalyzer()
+        print(analyzer)
 
     elif int(inputs[0]) == 2:
         pass
+    
+        
+    elif int(inputs[0]) == 3:
+        #Lab 8: 
+        
+        print("\nCargando información de crimenes ....")
+        controller.loadData(analyzer)
+        print('Ciudades cargadas: ' + str(controller.Size(analyzer)))
+        print('Altura del arbol: ' + str(controller.Height(analyzer)))
+        
 
     else:
         sys.exit(0)

@@ -51,6 +51,21 @@ def loadData(analyzer):
     return analyzer
 
 
+#Funciones de Consulta - Lab 8
+
+def Size(analyzer):
+    """
+    Numero de crimenes leidos
+    """
+    return model.Size(analyzer)
+
+
+def Height(analyzer):
+    """
+    Altura del indice (arbol)
+    """
+    return model.Height(analyzer)
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
