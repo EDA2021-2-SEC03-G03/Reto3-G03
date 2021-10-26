@@ -53,6 +53,8 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        # catalog es el controlador que se usará de acá en adelante
+        catalog = controller.initAnalyzer()
 
     elif int(inputs[0]) == 2:
         pass
