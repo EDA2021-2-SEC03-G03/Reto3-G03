@@ -40,20 +40,37 @@ los mismos.
 
 # Construccion de modelos
 def newAnalyzer():
-    catalog = { 'todos': None,
-                'datetime': None}
-    catalog['todos'] = lt.newList('SINGLE_LINKED')
+    analyzer = { 'UFOS': None,
+                'datetime': None,
+                'city': None}
+    analyzer['UFOS'] = lt.newList('SINGLE_LINKED')
 
-    catalog['datetime'] = om.newMap(omaptype = 'RBT',
+    analyzer['datetime'] = om.newMap(omaptype = 'RBT',
                                       comparefunction = compare)
-    
-    return catalog
-
+    analyzer['city'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compare)
+    return analyzer
 
 # Funciones para agregar informacion al catalogo
+def addEvent(analyzer, event):
+    lt.addLast(analyzer['UFOS'], event)
+    addCity(analyzer['city'], event)
+    return analyzer
+
+def addCity(analyzer, evento):
+    entry = om.get(analyzer, evento['city'])
+    if entry is None:
+        newEntry = newdata()
+        om.put(analyzer, evento['city'], newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry, evento)
+    return analyzer
 
 # Funciones para creacion de datos
-
+def newdata():
+    entry = lt.newList('SINGLE_LINKED', compare)
+    return entry
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
