@@ -44,11 +44,10 @@ def loadData(analyzer):
     Carga los datos de los archivos CSV en el modelo
     """
     namefile = cf.data_dir + 'UFOS/UFOS-utf8-small.csv'
-    input_file = csv.DictReader(open(namefile, encoding="utf-8"),
-                                delimiter=",")
+    input_file = csv.DictReader(open(namefile, encoding="utf-8"), delimiter=",")
     for event in input_file:
         model.addEvent(analyzer, event)
-    return analyzer
+
 
 
 #Funciones de Consulta - Lab 8

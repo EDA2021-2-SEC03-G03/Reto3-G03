@@ -45,8 +45,6 @@ def newAnalyzer():
                 'city': None}
     analyzer['UFOS'] = lt.newList('SINGLE_LINKED')
 
-    analyzer['datetime'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compare)
     analyzer['city'] = om.newMap(omaptype = 'RBT',
                                       comparefunction = compare)
     return analyzer
@@ -61,7 +59,7 @@ def addCity(map, evento):
     city = evento['city']
     entry = om.get(map, city)
     if entry is None:
-        newEntry = newdata()
+        newEntry = newdataCity(city)
         om.put(map, city, newEntry)
     else:
         newEntry = me.getValue(entry)
@@ -98,8 +96,10 @@ def addDateIndex(datentry, crime):
 """
 
 # Funciones para creacion de datos
-def newdata():
-    entry = lt.newList('SINGLE_LINKED', compare)
+def newdataCity(city):
+    entry = {'city': None, 'events': None}
+    entry['city'] = city
+    entry['events'] = lt.newList('SINGLE_LINKED', compare)
     return entry
 
 # ==============================
