@@ -41,12 +41,11 @@ los mismos.
 # Construccion de modelos
 def newAnalyzer():
     analyzer = { 'UFOS': None,
-                'datetime': None,
                 'city': None}
     analyzer['UFOS'] = lt.newList('SINGLE_LINKED')
 
     analyzer['city'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compare)
+                                      comparefunction = compareCityLab)
     return analyzer
 
 # Funciones para agregar informacion al catalogo
@@ -63,7 +62,7 @@ def addCity(map, evento):
         om.put(map, city, newEntry)
     else:
         newEntry = me.getValue(entry)
-    lt.addLast(newEntry, evento)
+    lt.addLast(newEntry['events'], evento)
     return map
 
     """
@@ -110,7 +109,7 @@ def Size(analyzer):
     """
     Número de crimenes
     """
-    return lt.size(analyzer['city'])
+    return om.size(analyzer['city'])
 
 
 def Height(analyzer):
@@ -125,6 +124,18 @@ def compareIds(id1, id2):
     if (id1 == id2):
         return 0
     elif (id1 > id2):
+        return 1
+    else:
+        return -1
+
+
+def compareCityLab(city1, entry):
+    
+    
+    #cityLab = me.getKey(entry)
+    if (city1 == entry):
+        return 0
+    elif (city1 > entry):
         return 1
     else:
         return -1
