@@ -61,14 +61,14 @@ while True:
         print(analyzer)
 
     elif int(inputs[0]) == 2:
-        pass
+        #Lab 8:
+        print("\nCargando información de eventos ....")
+        controller.loadData(analyzer)
     
         
     elif int(inputs[0]) == 3:
         #Lab 8: 
-        
-        print("\nCargando información de crimenes ....")
-        controller.loadData(analyzer)
+        print('Cargando información de características')
         print('Ciudades cargadas: ' + str(controller.Size(analyzer)))
         print('Altura del arbol: ' + str(controller.Height(analyzer)))
         
