@@ -71,7 +71,6 @@ while True:
         print('Ciudades cargadas: ' + str(controller.Size(analyzer)))
         print('Altura del arbol: ' + str(controller.Height(analyzer)))
         
-
     else:
         sys.exit(0)
 sys.exit(0)
