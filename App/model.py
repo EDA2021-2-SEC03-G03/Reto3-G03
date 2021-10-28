@@ -202,6 +202,19 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
     elapsed_time_mseg = (stop_time - start_time)*1000        
     return maxK, maxsize, lista_duracionSeg, elapsed_time_mseg
 
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 3:
+
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 4:
+
+
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 5:
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareCatalog(category, entry):
