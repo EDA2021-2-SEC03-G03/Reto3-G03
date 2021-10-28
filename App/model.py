@@ -30,6 +30,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
+from DISClib.Algorithms.Sorting import mergesort as ms
 from DISClib.Algorithms.Sorting import shellsort as sa
 import time
 import datetime
@@ -69,8 +70,8 @@ def newAnalyzer():
 # Funciones para agregar informacion al catalogo
 def addEvent(analyzer, event):
     lt.addLast(analyzer['UFOS'], event)
-    #Lab 8: addCity(analyzer['city'], event)
-    addCity(analyzer, event['city'], event)
+    #Lab 8: addCityLab(analyzer['city'], event)
+    #addCity(analyzer, event['city'], event)
     addDurationSeconds(analyzer['duration(seconds)'], event)
     addDurationMinuteHour(analyzer['duration(hours/min)'], event)
     addDateTime(analyzer['datetime'], event)
@@ -89,7 +90,7 @@ def addCity(analyzer, ciudad, event):
     #lt.addLast(city['events'], event)
 
 def addDurationSeconds(map, evento):
-    durationS = evento['duration(seconds)']
+    durationS = evento['duration (seconds)']
     entry = om.get(map, durationS)
     if entry is None:
         newEntry = newdataDS(durationS)
@@ -100,7 +101,7 @@ def addDurationSeconds(map, evento):
     return map
 
 def addDurationMinuteHour(map, evento):
-    durationHM = evento['duration(hours/min)']
+    durationHM = evento['duration (hours/min)']
     entry = om.get(map, durationHM)
     if entry is None:
         newEntry = newdata(durationHM)
@@ -135,6 +136,11 @@ def newdataDS(duration_seg):
     entry['events'] = lt.newList('ARRAY_LIST', compare)
     return entry
 
+def newData():
+    entry = {'events': None}
+    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= compare)
+    return entry
+
 def newdata(index):
     entry = {'Index': None, 'events': None}
     entry['Index'] = index
@@ -146,7 +152,7 @@ def newdata(index):
 
 # ==============================
 #Lab 8:
-def addCity(map, evento):
+def addCityLab(map, evento):
     city = evento['city']
     entry = om.get(map, city)
     if entry is None:
@@ -188,19 +194,19 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
     durationSegTree = analyzer['duration(seconds)']
     maxK = om.maxKey(durationSegTree)
     maxget = om.get(durationSegTree, maxK)
-    maxvalues = me.getValue(durationSegTree, maxget)
-    maxsize = lt.size(maxvalues)
+    maxvalues = me.getValue(maxget)
+    maxsize = lt.size(maxvalues['events'])
+    
     lst = om.values(analyzer['duration(seconds)'], minSeg, maxSeg)
     lista_duracionSeg = lt.newList('ARRAY_LIST')
 
     for i in lt.iterator(lst):
-        for j in lt.iterator(i):
+        for j in lt.iterator(i['events']):
             lt.addLast(lista_duracionSeg, j)
-
 
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000        
-    return maxK, maxsize, lista_duracionSeg, elapsed_time_mseg
+    return maxsize, lista_duracionSeg, elapsed_time_mseg, maxK
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 3:
@@ -246,4 +252,10 @@ def compare(eve1, eve2):
     else:
         return -1
 
+def cmpDS(ds1, ds2):
+    return float(ds1['duration (seconds)']) < float(ds2['duration (seconds)'])
+
 # Funciones de ordenamiento
+
+def sortDurationS(lista_duracionSeg):
+    return ms.sort(lista_duracionSeg, cmpDS)

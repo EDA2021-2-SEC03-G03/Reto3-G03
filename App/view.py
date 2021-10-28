@@ -79,10 +79,20 @@ while True:
 
     elif int(inputs[0]) == 3:
         #Req 2:
-        minSeg = input("Ingrese el límite inferior en segundos: ")
-        maxSeg = input("Ingrese el límite superior en segundos: ")
+        minSeg = input("Ingrese el límite inferior en segundos (maximo): ")
+        maxSeg = input("Ingrese el límite superior en segundos (minimo): ")
         eventDS = controller.getEventsByDurationS(analyzer, minSeg, maxSeg)
-        pass
+        lista = eventDS[1]
+
+        print('There are ' + str(eventDS[0]) + ' sightings with the maximun duration in seconds: ' + str(eventDS[3]))
+        print("--------------------------------------------------------------------------")
+        print("First three")
+        print(lista['elements'][0:3])
+        print("--------------------------------------------------------------------------")
+        print('Last three: ')
+        print(lista['elements'][-3:])
+        print("--------------------------------------------------------------------------")
+        print("Tiempo utilizado en el ordenamiento: " + str(eventDS[2]) + " Milisegundos")
         
     else:
         sys.exit(0)
