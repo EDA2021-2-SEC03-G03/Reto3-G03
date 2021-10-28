@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+import time
 import datetime
 assert cf
 
@@ -91,7 +92,7 @@ def addDurationSeconds(map, evento):
     durationS = evento['duration(seconds)']
     entry = om.get(map, durationS)
     if entry is None:
-        newEntry = newdata(durationS)
+        newEntry = newdataDS(durationS)
         om.put(map, durationS, newEntry)
     else:
         newEntry = me.getValue(entry)
@@ -128,9 +129,15 @@ def newdataCity():
     entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= compare)
     return entry
 
+def newdataDS(duration_seg):
+    entry = {'Duration_seg': duration_seg, 'events': None}
+    entry['Index'] = duration_seg
+    entry['events'] = lt.newList('ARRAY_LIST', compare)
+    return entry
+
 def newdata(index):
     entry = {'Index': None, 'events': None}
-    entry['city'] = index
+    entry['Index'] = index
     entry['events'] = lt.newList('ARRAY_LIST', compare)
     return entry
 
@@ -168,6 +175,32 @@ def Height(analyzer):
     """
     return om.height(analyzer['city'])
 # ==============================
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 1:
+def getEventsByCity(ciudad):
+    pass 
+
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 2:
+def getEventsByDurationS(analyzer, minSeg, maxSeg):
+    start_time = time.process_time()
+    durationSegTree = analyzer['duration(seconds)']
+    maxK = om.maxKey(durationSegTree)
+    maxget = om.get(durationSegTree, maxK)
+    maxvalues = me.getValue(durationSegTree, maxget)
+    maxsize = lt.size(maxvalues)
+    lst = om.values(analyzer['duration(seconds)'], minSeg, maxSeg)
+    lista_duracionSeg = lt.newList('ARRAY_LIST')
+
+    for i in lt.iterator(lst):
+        for j in lt.iterator(i):
+            lt.addLast(lista_duracionSeg, j)
+
+
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000        
+    return maxK, maxsize, lista_duracionSeg, elapsed_time_mseg
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

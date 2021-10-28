@@ -71,9 +71,17 @@ while True:
         #print('Ciudades cargadas: ' + str(controller.Size(analyzer)))
         #print('Altura del arbol: ' + str(controller.Height(analyzer)))
     elif int(inputs[0]) == 2:
+
+        #Req 1:
+        ciudad = input("Ingrese el nombre de la ciudad a consultar: ")
+        EventC = controller.getEventsByCity(ciudad)
         pass
 
     elif int(inputs[0]) == 3:
+        #Req 2:
+        minSeg = input("Ingrese el límite inferior en segundos: ")
+        maxSeg = input("Ingrese el límite superior en segundos: ")
+        eventDS = controller.getEventsByDurationS(analyzer, minSeg, maxSeg)
         pass
         
     else:
