@@ -31,6 +31,7 @@ from DISClib.ADT import map as mp
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+import datetime
 assert cf
 
 """
@@ -70,6 +71,8 @@ def addEvent(analyzer, event):
     #Lab 8: addCity(analyzer['city'], event)
     addCity(analyzer, event['city'], event)
     addDurationSeconds(analyzer['duration(seconds)'], event)
+    addDurationMinuteHour(analyzer['duration(hours/min)'], event)
+    addDateTime(analyzer['datetime'], event)
     return analyzer
 
 def addCity(analyzer, ciudad, event):
@@ -82,7 +85,7 @@ def addCity(analyzer, ciudad, event):
     else:
         city = newdataCity()
         mp.put(cities, ciudad, city)
-    lt.addLast(city['events'], event)
+    #lt.addLast(city['events'], event)
 
 def addDurationSeconds(map, evento):
     durationS = evento['duration(seconds)']
@@ -94,6 +97,30 @@ def addDurationSeconds(map, evento):
         newEntry = me.getValue(entry)
     lt.addLast(newEntry['events'], evento)
     return map
+
+def addDurationMinuteHour(map, evento):
+    durationHM = evento['duration(hours/min)']
+    entry = om.get(map, durationHM)
+    if entry is None:
+        newEntry = newdata(durationHM)
+        om.put(map, durationHM, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], evento)
+    return map
+
+def addDateTime(map, evento):
+    occureddate = evento['datetime']
+    eventdate = datetime.datetime.strptime(occureddate, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, eventdate)
+    if entry is None:
+        newEntry = newdata(eventdate)
+        om.put(map, eventdate, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], evento)
+    return map
+
 
 # Funciones para creacion de datos
 def newdataCity():
