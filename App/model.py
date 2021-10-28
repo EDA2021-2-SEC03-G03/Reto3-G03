@@ -41,19 +41,77 @@ los mismos.
 # Construccion de modelos
 def newAnalyzer():
     analyzer = { 'UFOS': None,
-                'city': None}
+                'city': None,
+                'duration(seconds)': None,
+                'duration(hours/min)': None,
+                'datetime': None}
+
     analyzer['UFOS'] = lt.newList('SINGLE_LINKED')
 
-    analyzer['city'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compareCityLab)
+    #Lab 8: analyzer['city'] = om.newMap(omaptype = 'RBT',comparefunction = compareCityLab) 
+
+    analyzer['city'] = mp.newMap(10000,
+                                 maptype='PROBING',
+                                 loadfactor=0.5,
+                                 comparefunction=compareCatalog)
+    analyzer['duration(seconds)'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compare)
+    analyzer['duration(hours/min)'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compare)
+    analyzer['datetime'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compare)
+
+
     return analyzer
 
 # Funciones para agregar informacion al catalogo
 def addEvent(analyzer, event):
     lt.addLast(analyzer['UFOS'], event)
-    addCity(analyzer['city'], event)
+    #Lab 8: addCity(analyzer['city'], event)
+    addCity(analyzer, event['city'], event)
+    addDurationSeconds(analyzer['duration(seconds)'], event)
     return analyzer
 
+def addCity(analyzer, ciudad, event):
+
+    cities = analyzer['city']
+    existmedium = mp.contains(cities, ciudad)
+    if existmedium:
+        entry = mp.get(cities, ciudad)
+        city = me.getValue(entry)
+    else:
+        city = newdataCity()
+        mp.put(cities, ciudad, city)
+    lt.addLast(city['events'], event)
+
+def addDurationSeconds(map, evento):
+    durationS = evento['duration(seconds)']
+    entry = om.get(map, durationS)
+    if entry is None:
+        newEntry = newdata(durationS)
+        om.put(map, durationS, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], evento)
+    return map
+
+# Funciones para creacion de datos
+def newdataCity():
+    entry = {'events': None}
+    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= compare)
+    return entry
+
+def newdata(index):
+    entry = {'Index': None, 'events': None}
+    entry['city'] = index
+    entry['events'] = lt.newList('ARRAY_LIST', compare)
+    return entry
+
+# Funciones de consulta
+
+
+# ==============================
+#Lab 8:
 def addCity(map, evento):
     city = evento['city']
     entry = om.get(map, city)
@@ -64,46 +122,11 @@ def addCity(map, evento):
         newEntry = me.getValue(entry)
     lt.addLast(newEntry['events'], evento)
     return map
-
-    """
-    occurreddate = crime['OCCURRED_ON_DATE']
-    crimedate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, crimedate.date())
-    if entry is None:
-        datentry = newDataEntry(crime)
-        om.put(map, crimedate.date(), datentry)
-    else:
-        datentry = me.getValue(entry)
-    addDateIndex(datentry, crime)
-    return map
-    """
-
-"""
-def addDateIndex(datentry, crime):
-    lst = datentry['lstcrimes']
-    lt.addLast(lst, crime)
-    offenseIndex = datentry['offenseIndex']
-    offentry = m.get(offenseIndex, crime['OFFENSE_CODE_GROUP'])
-    if (offentry is None):
-        entry = newOffenseEntry(crime['OFFENSE_CODE_GROUP'], crime)
-        lt.addLast(entry['lstoffenses'], crime)
-        m.put(offenseIndex, crime['OFFENSE_CODE_GROUP'], entry)
-    else:
-        entry = me.getValue(offentry)
-        lt.addLast(entry['lstoffenses'], crime)
-    return datentry
-"""
-
-# Funciones para creacion de datos
 def newdataCity(city):
     entry = {'city': None, 'events': None}
     entry['city'] = city
     entry['events'] = lt.newList('SINGLE_LINKED', compare)
     return entry
-
-# ==============================
-# Funciones de consulta
-# ==============================
 
 def Size(analyzer):
     """
@@ -117,17 +140,18 @@ def Height(analyzer):
     Altura del arbol
     """
     return om.height(analyzer['city'])
+# ==============================
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
-def compareIds(id1, id2):
-    if (id1 == id2):
+def compareCatalog(category, entry):
+    categoryentry = me.getKey(entry)
+    if (category == categoryentry):
         return 0
-    elif (id1 > id2):
+    elif (category > categoryentry):
         return 1
     else:
         return -1
-
 
 def compareCityLab(city1, entry):
     

@@ -48,8 +48,6 @@ def loadData(analyzer):
     for event in input_file:
         model.addEvent(analyzer, event)
 
-
-
 #Funciones de Consulta - Lab 8
 
 def Size(analyzer):
@@ -64,6 +62,9 @@ def Height(analyzer):
     Altura del indice (arbol)
     """
     return model.Height(analyzer)
+
+
+#Funciones de Consulta
 
 # Funciones de ordenamiento
 
