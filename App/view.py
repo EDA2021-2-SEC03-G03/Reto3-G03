@@ -79,8 +79,8 @@ while True:
 
     elif int(inputs[0]) == 3:
         #Req 2:
-        minSeg = input("Ingrese el límite inferior en segundos (maximo): ")
-        maxSeg = input("Ingrese el límite superior en segundos (minimo): ")
+        minSeg = input("Ingrese el límite inferior en segundos: ")
+        maxSeg = input("Ingrese el límite superior en segundos: ")
         eventDS = controller.getEventsByDurationS(analyzer, minSeg, maxSeg)
         lista = eventDS[1]
 
