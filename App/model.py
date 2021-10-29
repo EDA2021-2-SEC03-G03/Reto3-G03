@@ -60,7 +60,7 @@ def newAnalyzer():
     analyzer['duration(seconds)'] = om.newMap(omaptype = 'RBT',
                                       comparefunction = compareDS)
     analyzer['duration(hours/min)'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = '')
+                                      comparefunction = cmpDatetime)
     analyzer['datetime'] = om.newMap(omaptype = 'RBT',
                                       comparefunction ='')
 
@@ -104,7 +104,7 @@ def addDurationMinuteHour(map, evento):
     durationHM = evento['duration (hours/min)']
     entry = om.get(map, durationHM)
     if entry is None:
-        newEntry = newdata(durationHM)
+        newEntry = newData()
         om.put(map, durationHM, newEntry)
     else:
         newEntry = me.getValue(entry)
@@ -116,7 +116,7 @@ def addDateTime(map, evento):
     eventdate = datetime.datetime.strptime(occureddate, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map, eventdate)
     if entry is None:
-        newEntry = newdata(eventdate)
+        newEntry = newdataDatetime()
         om.put(map, eventdate, newEntry)
     else:
         newEntry = me.getValue(entry)
@@ -137,13 +137,12 @@ def newdataDS():
 
 def newData():
     entry = {'events': None}
-    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= '')
+    entry['events'] = lt.newList('ARRAY_LIST', '')
     return entry
 
-def newdata(index):
-    entry = {'Index': None, 'events': None}
-    entry['Index'] = index
-    entry['events'] = lt.newList('ARRAY_LIST', '')
+def newdataDatetime():
+    entry = {'events': None}
+    entry['events'] = lt.newList('ARRAY_LIST', cmpDatetime)
     return entry
 
 # Funciones de consulta
@@ -216,7 +215,8 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 4:
-
+def geteventsByDatetime(analyzer, datemin, datemax):
+    pass
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------
@@ -253,12 +253,22 @@ def compareDS(eve1, eve2):
     else:
         return -1
 
-def cmpDS(ds1, ds2):
+def cmpDatetime(ds1, ds2):
     ds_1 = ds1['datetime']
     s1 = datetime.datetime.strptime(ds_1, '%Y-%m-%d %H:%M:%S')
     ds_2 = ds2['datetime']
     s2 = datetime.datetime.strptime(ds_2, '%Y-%m-%d %H:%M:%S')
-    return s1.date() < s2.date()
+    if (s1.date() == s2.date()):
+        return 0
+    elif (s1.date() > s2.date()):
+        return 1
+    else:
+        return -1
+
+def cmpDS(ds1, ds2):
+    ds_1 = ds1['duration (seconds)']
+    ds_2 = ds2['duration (seconds)']
+    return float(ds_1) < float(ds_2)
 
 def compListDS(event, events):
     if str(event) in str(events['Duration_seg']):

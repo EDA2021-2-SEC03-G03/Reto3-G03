@@ -74,6 +74,12 @@ def getEventsByCity(ciudad):
 def getEventsByDurationS(analyzer, minSeg, maxSeg):
     return model.getEventsByDurationS(analyzer, minSeg, maxSeg)
 
+#Req 3:
+
+#Req 4:
+def geteventsByDatetime(analyzer, datemin, datemax):
+    return model.geteventsByDatetime(analyzer, datemin, datemax)
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo

@@ -85,6 +85,7 @@ while True:
         lista = eventDS[1]
 
         print('There are ' + str(eventDS[0]) + ' sightings with the maximun duration in seconds: ' + str(eventDS[3]))
+        print('There are ' + str(lt.size(lista)) + ' sightings between: ' + str(minSeg) + ' and ' + str(maxSeg) + ' duration')
         print("--------------------------------------------------------------------------")
         print("First three")
         print(lista['elements'][0:3])
@@ -93,6 +94,16 @@ while True:
         print(lista['elements'][-3:])
         print("--------------------------------------------------------------------------")
         print("Tiempo utilizado en el ordenamiento: " + str(eventDS[2]) + " Milisegundos")
+
+    elif int(inputs[0]) == 4:
+        pass 
+
+    elif int(inputs[0]) == 5:
+
+        datemin = input('Límite inferior en formato AAAA-MM-DD.')
+        datemax = input('Límite inferior en formato AAAA-MM-DD.')
+        eventD = controller.geteventsByDatetime(analyzer, datemin, datemax)
+
         
     else:
         sys.exit(0)
