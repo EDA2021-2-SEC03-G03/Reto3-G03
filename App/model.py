@@ -131,8 +131,8 @@ def newdataCity():
     return entry
 
 def newdataDS(duration_seg):
-    entry = {'Duration_seg': duration_seg, 'events': None}
-    entry['Index'] = duration_seg
+    entry = {'Duration_seg': None, 'events': None}
+    entry['Duration_seg'] = duration_seg
     entry['events'] = lt.newList('ARRAY_LIST', compare)
     return entry
 
@@ -204,6 +204,7 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
         for j in lt.iterator(i['events']):
             lt.addLast(lista_duracionSeg, j)
 
+    sortDurationS(lista_duracionSeg)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000        
     return maxsize, lista_duracionSeg, elapsed_time_mseg, maxK
@@ -253,7 +254,17 @@ def compare(eve1, eve2):
         return -1
 
 def cmpDS(ds1, ds2):
-    return float(ds1['duration (seconds)']) < float(ds2['duration (seconds)'])
+    ds_1 = ds1['datetime']
+    s1 = datetime.datetime.strptime(ds_1, '%Y-%m-%d %H:%M:%S')
+    ds_2 = ds2['datetime']
+    s2 = datetime.datetime.strptime(ds_2, '%Y-%m-%d %H:%M:%S')
+    return s1.date() < s2.date()
+
+def compListDS(event, events):
+    if str(event) in str(events['Duration_seg']):
+        return 0
+    else:
+        return -1
 
 # Funciones de ordenamiento
 
