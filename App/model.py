@@ -58,11 +58,11 @@ def newAnalyzer():
                                  loadfactor=0.5,
                                  comparefunction=compareCatalog)
     analyzer['duration(seconds)'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compare)
+                                      comparefunction = compareDS)
     analyzer['duration(hours/min)'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compare)
+                                      comparefunction = '')
     analyzer['datetime'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compare)
+                                      comparefunction ='')
 
 
     return analyzer
@@ -73,8 +73,8 @@ def addEvent(analyzer, event):
     #Lab 8: addCityLab(analyzer['city'], event)
     #addCity(analyzer, event['city'], event)
     addDurationSeconds(analyzer['duration(seconds)'], event)
-    addDurationMinuteHour(analyzer['duration(hours/min)'], event)
-    addDateTime(analyzer['datetime'], event)
+    #addDurationMinuteHour(analyzer['duration(hours/min)'], event)
+    #addDateTime(analyzer['datetime'], event)
     return analyzer
 
 def addCity(analyzer, ciudad, event):
@@ -93,7 +93,7 @@ def addDurationSeconds(map, evento):
     durationS = evento['duration (seconds)']
     entry = om.get(map, durationS)
     if entry is None:
-        newEntry = newdataDS(durationS)
+        newEntry = newdataDS()
         om.put(map, durationS, newEntry)
     else:
         newEntry = me.getValue(entry)
@@ -127,24 +127,23 @@ def addDateTime(map, evento):
 # Funciones para creacion de datos
 def newdataCity():
     entry = {'events': None}
-    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= compare)
+    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= '')
     return entry
 
-def newdataDS(duration_seg):
-    entry = {'Duration_seg': None, 'events': None}
-    entry['Duration_seg'] = duration_seg
-    entry['events'] = lt.newList('ARRAY_LIST', compare)
+def newdataDS():
+    entry = {'events': None}
+    entry['events'] = lt.newList('ARRAY_LIST', compareDS)
     return entry
 
 def newData():
     entry = {'events': None}
-    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= compare)
+    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= '')
     return entry
 
 def newdata(index):
     entry = {'Index': None, 'events': None}
     entry['Index'] = index
-    entry['events'] = lt.newList('ARRAY_LIST', compare)
+    entry['events'] = lt.newList('ARRAY_LIST', '')
     return entry
 
 # Funciones de consulta
@@ -165,7 +164,7 @@ def addCityLab(map, evento):
 def newdataCity(city):
     entry = {'city': None, 'events': None}
     entry['city'] = city
-    entry['events'] = lt.newList('SINGLE_LINKED', compare)
+    entry['events'] = lt.newList('SINGLE_LINKED', '')
     return entry
 
 def Size(analyzer):
@@ -196,12 +195,13 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
     maxget = om.get(durationSegTree, maxK)
     maxvalues = me.getValue(maxget)
     maxsize = lt.size(maxvalues['events'])
-    
+   
     lst = om.values(analyzer['duration(seconds)'], minSeg, maxSeg)
     lista_duracionSeg = lt.newList('ARRAY_LIST')
 
     for i in lt.iterator(lst):
-        for j in lt.iterator(i['events']):
+        i = i['events']
+        for j in lt.iterator(i):
             lt.addLast(lista_duracionSeg, j)
 
     sortDurationS(lista_duracionSeg) #Se organiza cronologicamente
@@ -244,11 +244,11 @@ def compareCityLab(city1, entry):
     else:
         return -1
 
-def compare(eve1, eve2):
+def compareDS(eve1, eve2):
   
-    if (eve1 == eve2):
+    if (float(eve1) == float(eve2)):
         return 0
-    elif (eve1 > eve2):
+    elif (float(eve1) > float(eve2)):
         return 1
     else:
         return -1
