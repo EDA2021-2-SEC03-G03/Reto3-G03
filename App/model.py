@@ -204,7 +204,7 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
         for j in lt.iterator(i['events']):
             lt.addLast(lista_duracionSeg, j)
 
-    sortDurationS(lista_duracionSeg)
+    sortDurationS(lista_duracionSeg) #Se organiza cronologicamente
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000        
     return maxsize, lista_duracionSeg, elapsed_time_mseg, maxK
