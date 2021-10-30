@@ -67,8 +67,8 @@ def Height(analyzer):
 #Funciones de Consulta
 
 #Req 1:
-def getEventsByCity(ciudad):
-    return model.getEventsByCity(ciudad)
+def getEventsByCity(analyzer):
+    return model.getEventsByCity(analyzer)
 
 #Req 2:
 def getEventsByDurationS(analyzer, minSeg, maxSeg):

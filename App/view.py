@@ -74,7 +74,7 @@ while True:
 
         #Req 1:
         ciudad = input("Ingrese el nombre de la ciudad a consultar: ")
-        EventC = controller.getEventsByCity(ciudad)
+        EventC = controller.getEventsByCity(analyzer)
         pass
 
     elif int(inputs[0]) == 3:
