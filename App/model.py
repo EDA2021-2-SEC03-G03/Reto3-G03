@@ -74,7 +74,7 @@ def addEvent(analyzer, event):
     #addCity(analyzer, event['city'], event)
     addDurationSeconds(analyzer['duration(seconds)'], event)
     #addDurationMinuteHour(analyzer['duration(hours/min)'], event)
-    #addDateTime(analyzer['datetime'], event)
+    addDateTime(analyzer['datetime'], event)
     return analyzer
 
 def addCity(analyzer, ciudad, event):
@@ -216,8 +216,13 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 4:
 def geteventsByDatetime(analyzer, datemin, datemax):
+
+    
     pass
 
+def getDate(analyzer, datemin, datemax):
+    date = analyzer['datetime']
+    pass 
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 5:

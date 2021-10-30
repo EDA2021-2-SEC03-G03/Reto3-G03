@@ -101,7 +101,7 @@ while True:
     elif int(inputs[0]) == 5:
 
         datemin = input('Límite inferior en formato AAAA-MM-DD.')
-        datemax = input('Límite inferior en formato AAAA-MM-DD.')
+        datemax = input('Límite superior en formato AAAA-MM-DD.')
         eventD = controller.geteventsByDatetime(analyzer, datemin, datemax)
 
         
