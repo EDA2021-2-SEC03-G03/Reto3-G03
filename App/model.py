@@ -57,8 +57,6 @@ def newAnalyzer():
                                       comparefunction = compareHM)
     analyzer['duration(seconds)'] = om.newMap(omaptype = 'RBT',
                                       comparefunction = compareDS)
-    analyzer['date'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = compareHM)
     analyzer['datetime'] = om.newMap(omaptype = 'RBT',
                                       comparefunction =compareHM)
     analyzer['time'] = om.newMap(omaptype = 'RBT',
