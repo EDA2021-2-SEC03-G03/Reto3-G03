@@ -73,9 +73,24 @@ while True:
     elif int(inputs[0]) == 2:
 
         #Req 1:
-        ciudad = input("Ingrese el nombre de la ciudad a consultar: ")
-        EventC = controller.getEventsByCity(analyzer)
-        pass
+        ciudad = input("Ingrese el nombre de la ciudad a consultar: ").lower()
+        EventC = controller.getEventsByCity(analyzer, ciudad)
+        lista = EventC[1]
+
+        print('There are ' + str(EventC[0]) + ' sightings in the city with more sightings: ' + str(EventC[3]))
+        print('There are ' + str(lt.size(lista)) + ' sightings in ' + ciudad.upper())
+        print("--------------------------------------------------------------------------")
+        print("First three")
+        primeros=lt.subList(lista,1,3)
+        for avistamiento in lt.iterator(primeros):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print('Last three: ')
+        ultimos=lt.subList(lista,lt.size(lista)-2,3)
+        for avistamiento in lt.iterator(ultimos):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print("Tiempo utilizado en el ordenamiento: " + str(EventC[2]) + " Milisegundos")
 
     elif int(inputs[0]) == 3:
         #Req 2:
@@ -96,13 +111,50 @@ while True:
         print("Tiempo utilizado en el ordenamiento: " + str(eventDS[2]) + " Milisegundos")
 
     elif int(inputs[0]) == 4:
-        pass 
+        #Req 3:
+        minDate = input("Ingrese la fecha inferior en formato HH:MM:SS: ")
+        maxDate = input("Ingrese la fecha superior en formato HH:MM:SS: ")
+        eventHM = controller.getEventsByRangeDate(analyzer, minDate, maxDate)
+        lista = eventHM[1]
+
+        print('There are ' + str(eventHM[0]) + ' sightings in the maximum date: ' + str(eventHM[3]))
+        print('There are ' + str(lt.size(lista)) + ' sightings between: ' + str(minDate) + ' and ' + str(maxDate) + ' duration')
+        print("--------------------------------------------------------------------------")
+        print("First three")
+        primeros=lt.subList(lista,1,3)
+        for avistamiento in lt.iterator(primeros):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print('Last three: ')
+        ultimos=lt.subList(lista,lt.size(lista)-2,3)
+        for avistamiento in lt.iterator(ultimos):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print("Tiempo utilizado en el ordenamiento: " + str(eventHM[2]) + " Milisegundos")
+
+        
 
     elif int(inputs[0]) == 5:
 
-        datemin = input('Límite inferior en formato AAAA-MM-DD.')
-        datemax = input('Límite superior en formato AAAA-MM-DD.')
-        eventD = controller.geteventsByDatetime(analyzer, datemin, datemax)
+        datemin = input('Límite inferior en formato AAAA-MM-DD: ')
+        datemax = input('Límite superior en formato AAAA-MM-DD: ')
+        eventHM = controller.geteventsByDatetime(analyzer, datemin, datemax)
+        lista = eventHM[1]
+
+        print('There are ' + str(eventHM[0]) + ' sightings in the oldest date: ' + str(eventHM[3]))
+        print('There are ' + str(lt.size(lista)) + ' sightings between: ' + str(datemin) + ' and ' + str(datemax) + ' duration')
+        print("--------------------------------------------------------------------------")
+        print("First three")
+        primeros=lt.subList(lista,1,3)
+        for avistamiento in lt.iterator(primeros):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print('Last three: ')
+        ultimos=lt.subList(lista,lt.size(lista)-2,3)
+        for avistamiento in lt.iterator(ultimos):
+            print("| Datetime: " + avistamiento["datetime"] + " | City / Country: "  + avistamiento['city'] + " / " + avistamiento['country'] + "\t| Duration(in seconds): " + avistamiento['duration (seconds)']+"\t| Shape: " + avistamiento['shape'])
+        print("--------------------------------------------------------------------------")
+        print("Tiempo utilizado en el ordenamiento: " + str(eventHM[2]) + " Milisegundos")
 
         
     else:

@@ -53,16 +53,16 @@ def newAnalyzer():
 
     #Lab 8: analyzer['city'] = om.newMap(omaptype = 'RBT',comparefunction = compareCityLab) 
 
-    analyzer['city'] = mp.newMap(10000,
-                                 maptype='PROBING',
-                                 loadfactor=0.5,
-                                 comparefunction=compareCatalog)
+    analyzer['city'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction = compareHM)
     analyzer['duration(seconds)'] = om.newMap(omaptype = 'RBT',
                                       comparefunction = compareDS)
     analyzer['date'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction = cmpDate)
+                                      comparefunction = compareHM)
     analyzer['datetime'] = om.newMap(omaptype = 'RBT',
-                                      comparefunction =cmpDatetime)
+                                      comparefunction =compareHM)
+    analyzer['time'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction =compareHM)
 
 
     return analyzer
@@ -71,24 +71,24 @@ def newAnalyzer():
 def addEvent(analyzer, event):
     lt.addLast(analyzer['UFOS'], event)
     #Lab 8: addCityLab(analyzer['city'], event)
-    addCity(analyzer, event['city'], event)
+    addCity(analyzer['city'], event)
     addDurationSeconds(analyzer['duration(seconds)'], event)
     #addDurationMinuteHour(analyzer['duration(hours/min)'], event)
     addDateTime(analyzer['datetime'], event)
+    addTime(analyzer['time'], event)
     return analyzer
 
-def addCity(analyzer, ciudad, event):
+def addCity(map, event):
 
-    cities = analyzer['city']
-    existmedium = mp.contains(cities, ciudad)
-    if existmedium:
-        entry = mp.get(cities, ciudad)
-        city = me.getValue(entry)
+    city = event['city']
+    entry = om.get(map, city)
+    if entry is None:
+        newEntry = newDataCity()
+        om.put(map, city, newEntry)
     else:
-        city = newDataCity(ciudad)
-        mp.put(cities, ciudad, city)
-    addDateTimeCity(city['events'], event)
-    print(city['events'])
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], event)
+    return map
 
 def addDurationSeconds(map, evento):
     durationS = evento['duration (seconds)']
@@ -101,24 +101,26 @@ def addDurationSeconds(map, evento):
     lt.addLast(newEntry['events'], evento)
     return map
 
-def addDurationMinuteHour(map, evento):
-    durationHM = evento['duration (hours/min)']
-    entry = om.get(map, durationHM)
+def addDateTime(map, evento):
+    occureddate = evento['datetime']
+    eventdate = datetime.datetime.strptime(occureddate, '%Y-%m-%d %H:%M:%S')
+    
+    entry = om.get(map, eventdate.date())
     if entry is None:
-        newEntry = newData()
-        om.put(map, durationHM, newEntry)
+        newEntry = newdataDatetime(evento)
+        om.put(map, eventdate.date(), newEntry)
     else:
         newEntry = me.getValue(entry)
     lt.addLast(newEntry['events'], evento)
     return map
-
-def addDateTime(map, evento):
+    
+def addTime(map, evento):
     occureddate = evento['datetime']
     eventdate = datetime.datetime.strptime(occureddate, '%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, eventdate)
+    entry = om.get(map, eventdate.time())
     if entry is None:
-        newEntry = newdataDatetime()
-        om.put(map, eventdate, newEntry)
+        newEntry = newdataDatetime(evento)
+        om.put(map, eventdate.time(), newEntry)
     else:
         newEntry = me.getValue(entry)
     lt.addLast(newEntry['events'], evento)
@@ -126,23 +128,21 @@ def addDateTime(map, evento):
 
 def addDateTimeCity(map, evento):
     occureddate = evento['datetime']
-    print(occureddate)
+    
     eventdate = datetime.datetime.strptime(occureddate, '%Y-%m-%d %H:%M:%S')
-    print(map)
-    entry = om.get(map, eventdate)
+    entry = om.get(map, eventdate.date())
     if entry is None:
-        newEntry = newdataDatetime()
-        om.put(map, eventdate, newEntry)
+        newEntry = newdataDatetime(evento)
+        om.put(map, eventdate.date(), newEntry)
     else:
         newEntry = me.getValue(entry)
     lt.addLast(newEntry['events'], evento)
     return map
 
 # Funciones para creacion de datos
-def newDataCity(cityname):
-    entry = {'city':None,'events': None}
-    entry['city']= cityname
-    entry['events'] = om.newMap(omaptype = 'RBT', comparefunction= '')
+def newDataCity():
+    entry = {'events': None}
+    entry['events'] = lt.newList('SINGLE_LINKED', '')
     return entry
 
 def newdataDS():
@@ -155,9 +155,9 @@ def newData():
     entry['events'] = lt.newList('ARRAY_LIST', compareHM)
     return entry
 
-def newdataDatetime():
+def newdataDatetime(evento):
     entry = {'events': None}
-    entry['events'] = lt.newList('ARRAY_LIST', cmpDatetime)
+    entry['events'] = lt.newList('ARRAY_LIST', compareHM)
     return entry
 
 # Funciones de consulta
@@ -197,9 +197,25 @@ def Height(analyzer):
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 1:
-def getEventsByCity(analyzer):
-    for ciudad in analyzer["city"]:
-        print(ciudad)
+def getEventsByCity(analyzer,ciudad):
+    start_time = time.process_time()
+    ciudadTree = analyzer['city']
+    keys = om.keySet(ciudadTree)
+    eye_city = ""
+    sightings = 0
+    for ciudads in lt.iterator(keys):
+        par = om.get(analyzer['city'], ciudads) 
+        city_value = me.getValue(par)
+        if lt.size(city_value['events']) > sightings:
+            eye_city = ciudads
+            sightings = lt.size(city_value['events'])
+    city_especific = om.get(analyzer['city'], ciudad)
+    specific = me.getValue(city_especific)
+    list_specific = specific['events']
+    sortDurationHM(list_specific)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return sightings, list_specific, elapsed_time_mseg, eye_city
     
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 2:
@@ -226,19 +242,53 @@ def getEventsByDurationS(analyzer, minSeg, maxSeg):
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 3:
+def getEventsByRangeDate(analyzer, minDate, maxDate):
 
+    start_time = time.process_time()
+    datetimetree = analyzer['datetime']
+    maxK = om.maxKey(datetimetree)
+    maxget = om.get(datetimetree, maxK)
+    maxvalues = me.getValue(maxget)
+    maxsize = lt.size(maxvalues['events'])
+    fminDate=datetime.datetime.strptime(minDate, '%H:%M:%S')
+    fmaxDate=datetime.datetime.strptime(maxDate, '%H:%M:%S')
+    lst = om.values(analyzer['time'], fminDate.time(), fmaxDate.time())
+    lista_datesinrange = lt.newList('ARRAY_LIST')
+
+    for i in lt.iterator(lst):
+        i = i['events']
+        for j in lt.iterator(i):
+            lt.addLast(lista_datesinrange, j)
+
+    sortDurationHM(lista_datesinrange) 
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000        
+    return maxsize,lista_datesinrange, elapsed_time_mseg, maxK
 
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 4:
 def geteventsByDatetime(analyzer, datemin, datemax):
+    start_time = time.process_time()
+    datetimetree = analyzer['datetime']
+    minK = om.minKey(datetimetree)
+    minget = om.get(datetimetree, minK)
+    minvalues = me.getValue(minget)
+    minsize = lt.size(minvalues['events'])
+    fminDate = datetime.datetime.strptime(datemin, '%Y-%m-%d')
+    fmaxDate = datetime.datetime.strptime(datemax, '%Y-%m-%d')
+    lst = om.values(analyzer['datetime'], fminDate.date(), fmaxDate.date())
+    lista_datesinrange = lt.newList('ARRAY_LIST')
 
-    
-    pass
+    for i in lt.iterator(lst):
+        i = i['events']
+        for j in lt.iterator(i):
+            lt.addLast(lista_datesinrange, j)
 
-def getDate(analyzer, datemin, datemax):
-    date = analyzer['datetime']
-    pass 
+    sortDurationHM(lista_datesinrange) 
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000        
+    return minsize,lista_datesinrange, elapsed_time_mseg, minK
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 5:
@@ -275,9 +325,9 @@ def compareDS(eve1, eve2):
         return -1
 def compareHM(eve1, eve2):
   
-    if eve1 == eve2:
+    if (eve1 == eve2):
         return 0
-    elif eve1 > eve2:
+    elif (eve1 > eve2):
         return 1
     else:
         return -1        
@@ -287,12 +337,8 @@ def cmpDatetime(ds1, ds2):
     s1 = datetime.datetime.strptime(ds_1, '%Y-%m-%d %H:%M:%S')
     ds_2 = ds2['datetime']
     s2 = datetime.datetime.strptime(ds_2, '%Y-%m-%d %H:%M:%S')
-    if (s1.datetime() == s2.datetime()):
-        return 0
-    elif (s1.datetime() > s2.datetime()):
-        return 1
-    else:
-        return -1
+    return s2.date() > s1.date()
+
 def cmpDate(ds1, ds2):
     ds_1 = ds1['datetime']
     s1 = datetime.datetime.strptime(ds_1, '%Y-%m-%d %H:%M:%S')
@@ -320,3 +366,6 @@ def compListDS(event, events):
 
 def sortDurationS(lista_duracionSeg):
     return ms.sort(lista_duracionSeg, cmpDS)
+
+def sortDurationHM(lista_duracionSeg):
+    return ms.sort(lista_duracionSeg, cmpDatetime)
