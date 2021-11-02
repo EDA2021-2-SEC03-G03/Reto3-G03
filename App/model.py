@@ -351,6 +351,7 @@ def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
         for j in lt.iterator(i):
             lt.addLast(lista_filtrada, j)
 
+    sortLatitud(lista_filtrada)
     total = lt.size(lista_filtrada)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000        
@@ -435,6 +436,11 @@ def compListDS(event, events):
     else:
         return -1
 
+def cmpLAT(lat1, lat2):
+    lat1 = lat1['latitude']
+    lat2 = lat2['latitude']
+    return float(lat1) < float(lat2)
+
 # Funciones de ordenamiento
 
 def sortDurationS(lista_duracionSeg):
@@ -442,3 +448,5 @@ def sortDurationS(lista_duracionSeg):
 
 def sortDurationHM(lista_duracionSeg):
     return ms.sort(lista_duracionSeg, cmpDatetime)
+def sortLatitud(listfiltrada):
+    return ms.sort(listfiltrada, cmpLAT)
