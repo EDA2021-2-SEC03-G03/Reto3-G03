@@ -44,6 +44,7 @@ def printMenu():
     #print("3- Contar los avistamientos por duración")
     print("4- Contar avistamientos por Hora/Minutos del día")
     print("5- Contar los avistamientos en un rango de fechas")
+    print("6- Contar los avistamientos por Zonas Geográficas")
     print("0- Salir")
     print("*******************************************")
 
@@ -156,7 +157,34 @@ while True:
         print("--------------------------------------------------------------------------")
         print("Tiempo utilizado en el ordenamiento: " + str(eventHM[2]) + " Milisegundos")
 
-        
+    elif int(inputs[0]) == 6:
+        #Req 5:
+        latmin = float(input('Ingrese la latitud minima: '))
+        latmax =float(input('Ingrese la latitud máxima: '))
+        longmin = float(input('Ingrese la longitud minima: '))
+        longmax = float(input('Ingrese la longitud máxima: '))
+        eventLL = controller.eventLongLat(analyzer, latmin, latmax, longmin, longmax)
+
+        lst = eventLL[0]
+        print('The total of sightings in the area are: ' + str(eventLL[2]))
+        if eventLL[2] >= 10:
+            print("First five")
+            print(lst['elements'][0:5])
+            print("--------------------------------------------------------------------------")
+            print('Last five: ')
+            print(lst['elements'][-5:]) 
+            print("--------------------------------------------------------------------------")
+            print("Tiempo utilizado en el ordenamiento: " + str(eventLL[1]) + " Milisegundos")
+        elif eventLL[2] < 10:
+            print("First three")
+            print(lst['elements'][0:3])
+            print("--------------------------------------------------------------------------")
+            print('Last three: ')
+            print(lst['elements'][-3:]) 
+            print("--------------------------------------------------------------------------")
+            print("Tiempo utilizado en el ordenamiento: " + str(eventLL[1]) + " Milisegundos")
+
+
     else:
         sys.exit(0)
 sys.exit(0)

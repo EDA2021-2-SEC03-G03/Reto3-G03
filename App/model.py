@@ -47,7 +47,9 @@ def newAnalyzer():
                 'city': None,
                 'duration(seconds)': None,
                 'duration(hours/min)': None,
-                'datetime': None}
+                'datetime': None,
+                'latitud': None, 
+                'longitud': None}
 
     analyzer['UFOS'] = lt.newList('SINGLE_LINKED')
 
@@ -61,6 +63,10 @@ def newAnalyzer():
                                       comparefunction =compareHM)
     analyzer['time'] = om.newMap(omaptype = 'RBT',
                                       comparefunction =compareHM)
+    analyzer['latitud'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction =compareLL)  
+    analyzer['longitud'] = om.newMap(omaptype = 'RBT',
+                                      comparefunction =compareLL)  
 
 
     return analyzer
@@ -74,6 +80,7 @@ def addEvent(analyzer, event):
     #addDurationMinuteHour(analyzer['duration(hours/min)'], event)
     addDateTime(analyzer['datetime'], event)
     addTime(analyzer['time'], event)
+    addLongitud(analyzer['longitud'], event)
     return analyzer
 
 def addCity(map, event):
@@ -137,6 +144,30 @@ def addDateTimeCity(map, evento):
     lt.addLast(newEntry['events'], evento)
     return map
 
+def addLongitud(map, evento):
+    log = float(evento['longitude'])
+    longitud = round(log, 2)
+    entry = om.get(map, longitud)
+    if entry is None:
+        newEntry = newLongitud()
+        om.put(map, longitud, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], evento)
+    return map
+
+def addLatitud(map, evento):
+    lat = float(evento['latitude'])
+    latitud = round(lat, 2)
+    entry = om.get(map, latitud)
+    if entry is None:
+        newEntry = newLatitud()
+        om.put(map, latitud, newEntry)
+    else:
+        newEntry = me.getValue(entry)
+    lt.addLast(newEntry['events'], evento)
+    return map
+
 # Funciones para creacion de datos
 def newDataCity():
     entry = {'events': None}
@@ -156,6 +187,16 @@ def newData():
 def newdataDatetime(evento):
     entry = {'events': None}
     entry['events'] = lt.newList('ARRAY_LIST', compareHM)
+    return entry
+
+def newLatitud():
+    entry = {'events': None}
+    entry['events'] = lt.newList('ARRAY_LIST', compareLL)
+    return entry
+
+def newLongitud():
+    entry = {'events': None}
+    entry['events'] = lt.newList('ARRAY_LIST', compareLL)
     return entry
 
 # Funciones de consulta
@@ -291,6 +332,31 @@ def geteventsByDatetime(analyzer, datemin, datemax):
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 5:
 
+def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
+    start_time = time.process_time()
+    longmap = analyzer['longitud']
+    lst1 = om.values(longmap, longmin, longmax)
+    comb = om.newMap(omaptype='RBT', comparefunction=compareLL)
+    lista_filtrada = lt.newList('ARRAY_LIST')
+
+    for i in lt.iterator(lst1):
+        i = i['events']
+        for j in lt.iterator(i):
+            addLatitud(comb, j)
+     
+    listasemifiltrada =  om.values(comb, latmin, latmax)
+
+    for i in lt.iterator(listasemifiltrada):
+        i = i['events']
+        for j in lt.iterator(i):
+            lt.addLast(lista_filtrada, j)
+
+    total = lt.size(lista_filtrada)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000        
+    return lista_filtrada, elapsed_time_mseg, total
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compareCatalog(category, entry):
@@ -328,7 +394,16 @@ def compareHM(eve1, eve2):
     elif (eve1 > eve2):
         return 1
     else:
-        return -1        
+        return -1  
+
+def compareLL(eve1, eve2):
+  
+    if (float(eve1) == float(eve2)):
+        return 0
+    elif (float(eve1) > float(eve2)):
+        return 1
+    else:
+        return -1      
 
 def cmpDatetime(ds1, ds2):
     ds_1 = ds1['datetime']

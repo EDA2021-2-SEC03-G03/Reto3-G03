@@ -82,6 +82,10 @@ def getEventsByRangeDate(analyzer, minDate, maxDate):
 def geteventsByDatetime(analyzer, datemin, datemax):
     return model.geteventsByDatetime(analyzer, datemin, datemax)
 
+#Req 5:
+def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
+    return model.eventLongLat(analyzer, latmin, latmax, longmin, longmax)
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
