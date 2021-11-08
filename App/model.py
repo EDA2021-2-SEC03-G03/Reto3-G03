@@ -403,7 +403,7 @@ def vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
                     icon=folium.Icon(color='green', icon_color='white', icon='info-sign', angle=0, prefix='glyphicon')).add_to(mapaF)
     
 
-    mapaF.save(outfile = 'eventos.html')
+    mapaF.save(outfile='eventos.html')
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
