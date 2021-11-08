@@ -45,10 +45,17 @@ def printMenu():
     print("4- Contar avistamientos por Hora/Minutos del día")
     print("5- Contar los avistamientos en un rango de fechas")
     print("6- Contar los avistamientos por Zonas Geográficas")
+    print("7- Visualizar los avistamientos de una zona geográfica (opción 6)")
     print("0- Salir")
     print("*******************************************")
 
 analyzer = None
+eventLL = None
+latmin = None
+latmax =None
+longmin = None
+longmax = None
+
 
 """
 Menu principal
@@ -184,6 +191,9 @@ while True:
             print("--------------------------------------------------------------------------")
             print("Tiempo utilizado en el ordenamiento: " + str(eventLL[1]) + " Milisegundos")
 
+    elif int(inputs[0]) == 7:
+
+        controller.vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
 
     else:
         sys.exit(0)

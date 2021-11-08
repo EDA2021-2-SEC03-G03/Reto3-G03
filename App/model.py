@@ -34,6 +34,7 @@ from DISClib.Algorithms.Sorting import mergesort as ms
 from DISClib.Algorithms.Sorting import shellsort as sa
 import time
 import datetime
+import folium 
 assert cf
 
 """
@@ -357,6 +358,52 @@ def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
     elapsed_time_mseg = (stop_time - start_time)*1000        
     return lista_filtrada, elapsed_time_mseg, total
 
+#---------------------------------------------------------------------------------------------------------------------------------------
+#Req 6:
+
+def vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
+    promedio_lat = (latmax + latmin)/ 2
+    latP = round(promedio_lat, 2)
+    promedio_long = (longmax + longmin)/ 2
+    longP = round(promedio_long, 2)
+
+    mapaF = folium.Map(location=(latP, longP), zoom_start = 8)
+
+    folium.Rectangle([(latmin, latmax), (longmin, longmax)],
+                        fill=True,
+                        weight=5,
+                        fill_color="orange",
+                        color="green").add_to(mapaF)
+
+    cityL = []
+    datetimeL = []
+    durationSL = []
+    shapeL = []
+    commentsL = []
+    countryL = []
+    latL = []
+    longL = []
+    for element in lt.iterator(eventLL[0]):
+        cityL.append(element['city'])
+        datetimeL.append(element['datetime'])
+        durationSL.append(element['duration (seconds)']) 
+        shapeL.append(element['shape'])
+        commentsL.append(element['comments'])
+        countryL.append(element['country'])
+        latL.append(element['latitude'])
+        longL.append(element['longitude'])
+
+    for  city, datetime, durationS, shape, comments, country, lat, long in zip(cityL, datetimeL, durationSL, shapeL, commentsL, countryL, latL, longL):
+        
+        info = 'Datetime: ' + str(datetime) + ', City: ' + str(city) + ', Country:' + str(country) + ', Shape: ' + str(shape) + ', Duration(seconds): ' + str(durationS) +', Comments: ' + str(comments) + ', Latitude: ' + str(lat) + ', Longitude: ' + str(long)
+    
+        folium.Marker(
+                    location=[lat,long], 
+                    popup=folium.Popup(info, max_widht=500), 
+                    icon=folium.Icon(color='green', icon_color='white', icon='info-sign', angle=0, prefix='glyphicon')).add_to(mapaF)
+    
+
+    mapaF.save(outfile = 'eventos.html')
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

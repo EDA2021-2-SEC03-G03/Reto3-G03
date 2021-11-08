@@ -86,6 +86,10 @@ def geteventsByDatetime(analyzer, datemin, datemax):
 def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
     return model.eventLongLat(analyzer, latmin, latmax, longmin, longmax)
 
+#Req 6: 
+def vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
+   return model.vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
+
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
