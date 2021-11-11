@@ -120,8 +120,10 @@ while True:
 
     elif int(inputs[0]) == 4:
         #Req 3:
-        minDate = input("Ingrese la fecha inferior en formato HH:MM:SS: ")
-        maxDate = input("Ingrese la fecha superior en formato HH:MM:SS: ")
+        minDate = input("Ingrese la hora inferior en formato HH:MM : ")
+        maxDate = input("Ingrese la hora superior en formato HH:MM : ")
+        minDate += ":00"
+        maxDate += ":00"
         eventHM = controller.getEventsByRangeDate(analyzer, minDate, maxDate)
         lista = eventHM[1]
 

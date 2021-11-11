@@ -458,7 +458,9 @@ def cmpDatetime(ds1, ds2):
     s1 = datetime.datetime.strptime(ds_1, '%Y-%m-%d %H:%M:%S')
     ds_2 = ds2['datetime']
     s2 = datetime.datetime.strptime(ds_2, '%Y-%m-%d %H:%M:%S')
-    return s2.date() > s1.date()
+    if s2.time() == s1.time():
+        return s2.date() > s1.date()
+    return s2.time() > s1.time()
 
 def cmpDate(ds1, ds2):
     ds_1 = ds1['datetime']
