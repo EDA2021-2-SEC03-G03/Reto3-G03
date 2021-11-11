@@ -87,8 +87,8 @@ def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
     return model.eventLongLat(analyzer, latmin, latmax, longmin, longmax)
 
 #Req 6: 
-def vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
-   return model.vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
+def visualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
+   return model.visualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
 
 # Funciones de ordenamiento
 

@@ -195,7 +195,7 @@ while True:
 
     elif int(inputs[0]) == 7:
 
-        controller.vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
+        controller.visualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax)
 
     else:
         sys.exit(0)

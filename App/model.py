@@ -361,7 +361,7 @@ def eventLongLat(analyzer, latmin, latmax, longmin, longmax):
 #---------------------------------------------------------------------------------------------------------------------------------------
 #Req 6:
 
-def vicualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
+def visualizarEventoZonaG(eventLL, latmin, latmax, longmin, longmax):
     promedio_lat = (latmax + latmin)/ 2
     latP = round(promedio_lat, 2)
     promedio_long = (longmax + longmin)/ 2
