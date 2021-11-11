@@ -41,7 +41,6 @@ def printMenu():
     print("1- Cargar información en el catálogo")
     print("2- Contar los avisamientos en una ciudad")
     print("3 - Datos caracterìsticos del árbol")
-    #print("3- Contar los avistamientos por duración")
     print("4- Contar avistamientos por Hora/Minutos del día")
     print("5- Contar los avistamientos en un rango de fechas")
     print("6- Contar los avistamientos por Zonas Geográficas")
@@ -68,16 +67,6 @@ while True:
         analyzer = controller.initAnalyzer()
         controller.loadData(analyzer)
 
-    #Lab 8:
-    #elif int(inputs[0]) == 2:
-        #Lab 8:
-        #print("\nCargando información de eventos ....")
-        #controller.loadData(analyzer)    
-    #elif int(inputs[0]) == 3:
-        #Lab 8: 
-        #print('Cargando información de características')
-        #print('Ciudades cargadas: ' + str(controller.Size(analyzer)))
-        #print('Altura del arbol: ' + str(controller.Height(analyzer)))
     elif int(inputs[0]) == 2:
 
         #Req 1:

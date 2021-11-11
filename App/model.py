@@ -418,7 +418,6 @@ def compareCatalog(category, entry):
 
 def compareCityLab(city1, entry):
     
-    
     #cityLab = me.getKey(entry)
     if (city1 == entry):
         return 0
